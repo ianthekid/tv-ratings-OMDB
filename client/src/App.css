@@ -1,0 +1,39 @@
+[class*='rating'] {
+  border: 1px solid white;
+  text-align: center;
+}
+[class*='rating'] a {
+  text-decoration: none;
+  color: #fff;
+}
+.rating-1,
+.rating-2,
+.rating-3,
+.rating-4,
+.rating-5 {
+  background-color: #bd2130;
+}
+.rating-6 {
+  background-color: #e04a59
+}
+.rating-7 {
+  background-color: #ffc107
+}
+.rating-8 {
+  background-color: #7adf90
+}
+.rating-9 {
+  background-color: #28a745
+}
+
+.App {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  text-align: center;
+}
