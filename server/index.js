@@ -25,27 +25,32 @@ app.get('/s/:search', function(req, res){
 
 app.get('/id/:id', function(req, res){
   var url = `${api}&i=${req.params.id}`;
-  var data = []
 
-  query(url, function(show){
+  query(url, function(show) {
+    //Show overview info (Title, Poster, meta info)
+    var details = show;
+    details['data'] = [];
+
+    //Loop through each Season and add as arr of Objs
     for(var i=1; i<=show.totalSeasons; i++) {
       var season = `${url}&Season=${i}`;
       query(season, function(s){
         var episodes = [];
         s.Episodes.map((e) => {
           var episode = e;
+          //OMDB API has outdated ratings. Check updated JSON file from IMDB tsv data
           if(e.imdbRating === "N/A") {
             var ep = ratings.find(x => x.tconst === e.imdbID)
             if(ep) episode['imdbRating'] = ep.averageRating
           }
           episodes.push(episode)
         })
-        data.push({ 
+        details['data'].push({ 
           season: parseInt(s.Season, 10),
           episodes: episodes
         });
-        if(data.length == show.totalSeasons)
-          res.send(data)
+        if(details['data'].length == show.totalSeasons)
+          res.send(details)
       })
     }
   })
