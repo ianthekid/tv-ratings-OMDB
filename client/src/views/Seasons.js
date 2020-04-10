@@ -1,5 +1,5 @@
 import React from 'react';
-import Episode from './Episode';
+import { Episode } from './';
 import { Row, Col } from 'react-bootstrap';
 
 function Seasons(props) {

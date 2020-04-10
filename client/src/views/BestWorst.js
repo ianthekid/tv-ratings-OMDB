@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row } from 'react-bootstrap';
-import List from './List';
+import { List } from './';
 
 function sortedEps(seasons, cb) {
   var show = [];

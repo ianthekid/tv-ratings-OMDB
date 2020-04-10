@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Seasons from './Seasons';
-import BestWorst from './BestWorst';
+import { BestWorst, Seasons } from './';
+
 
 function getShow(id) {
   return fetch(`http://localhost:3001/id/${id}`)
@@ -12,18 +12,12 @@ function getShow(id) {
   });
 }
 
-function Show() {
+function Show(props) {
   const [show, setShow] = useState([]);
 
   useEffect(() => {
-    getShow('tt0112167').then((res) => { setShow(res); })
-  }, []);
-
-//office tt0386676
-//simpsons tt0096697
-//always tt0472954
-//bb tt0903747
-//sliders tt0112167
+    getShow(props.match.params.imdbID).then((res) => { setShow(res); })
+  }, [props]);
 
   return (
     <div>
