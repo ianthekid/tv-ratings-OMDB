@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useHistory } from "react-router-dom";
+import { Row, Col, Form, Button } from 'react-bootstrap';
 import { SearchResults } from './';
 
 function searchImdb(title, callback) {
@@ -8,31 +9,56 @@ function searchImdb(title, callback) {
   .then(data => callback(data));
 }
 
-function Search() {
+function Search(props) {
 
+  const history = useHistory();
+  const [query, setQuery] = useState('');
   const [search, setSearch] = useState('');
   const [results, setResults] = useState([]);
   const [totalResults, setTotal] = useState(0);
+  
+  useEffect(() => {
+    handleQuery(props.match.params.query)
+  }, [ props.match.params.query ]) 
+
+  const handleQuery = useCallback((q) => {
+    searchImdb(q, (res) => {
+      setSearch('')
+      setQuery(q)
+      setResults(res.Search)
+      setTotal(res.totalResults)
+    })  
+  }, []);
 
   function handleChange(e){
     setSearch(e.target.value)
   }
 
-  function handleSearch() {
-    searchImdb(search, (res) => {
-      setResults(res.Search)
-      setTotal(res.totalResults)
-    })
+  function handleSearch(e) {
+    e.preventDefault();
+    history.push(`/search/${search}`)
   }
 
   return (
     <div>
-      <Form>
-        <Form.Group controlId="showTitle">
-          <Form.Label>Search for TV Show</Form.Label>
-          <Form.Control type="text" placeholder="example: The Office" onChange={handleChange} />
-        </Form.Group>
-        <Button onClick={handleSearch}>Submit</Button>
+      <Form onSubmit={handleSearch}>
+        <Row>
+          <Col>Search results for "{query}"</Col>
+        </Row>
+        <Row>
+          <Col xs={10}>
+            <Form.Group controlId="showTitle">
+              <Form.Control 
+                type="text" 
+                onChange={handleChange}
+                value={search}
+                placeholder="example: The Office" />
+            </Form.Group>
+          </Col>
+          <Col xs={2}>
+            <Button type="submit">Submit</Button>
+          </Col>
+        </Row>
       </Form>
       {(totalResults > 0) &&
         <SearchResults 

@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Show } from './views';
+import { Home, Search, Show } from './views';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import { Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 function App() {
 
   return (
     <div className="App">
       <header className="App-header">
-        <Route exact path="/" component={Search} />
-        <Route exact path="/show/:imdbID" component={Show} />
+        <Router>
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route exact path="/search/:query" component={Search} />
+            <Route exact path="/show/:imdbID" component={Show} />
+          </Switch>
+        </Router>
       </header>
     </div>
   );
