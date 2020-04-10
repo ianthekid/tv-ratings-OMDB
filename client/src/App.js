@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Container } from 'react-bootstrap';
 import { Home, Search, Show } from './views';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
+      <Container fluid>
         <Router>
           <Switch>
             <Route exact path="/" component={Home} />
@@ -16,7 +17,7 @@ function App() {
             <Route exact path="/show/:imdbID" component={Show} />
           </Switch>
         </Router>
-      </header>
+      </Container>
     </div>
   );
 }

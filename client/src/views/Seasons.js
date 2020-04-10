@@ -6,7 +6,7 @@ function Seasons(props) {
   return (
     <Row>
       {props.seasons.map((s,index) => (
-        <Col key={index}>
+        <Col xs={1} key={index} className="mr-1 p-0">
           <strong>{s.season}</strong>
           {s.episodes.map((e,i) => (
             <Episode

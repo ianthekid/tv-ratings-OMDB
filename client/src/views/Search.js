@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from "react-router-dom";
-import { Alert, Row, Col, Form, Button } from 'react-bootstrap';
+import { Alert, Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { SearchResults } from './';
 
 function searchImdb(title, callback) {
@@ -17,26 +17,7 @@ function Search(props) {
   const [error, setError] = useState(false);
   const [results, setResults] = useState([]);
   const [totalResults, setTotal] = useState(0);
-  
-  useEffect(() => {
-    handleQuery(props.match.params.query)
-  }, [ props.match.params.query ]) 
-
-  const handleQuery = useCallback((q) => {
-    searchImdb(q, (res) => {
-      setSearch('')
-      setQuery(q)
-    if(res.Response === "False") {
-        setError(true)
-        setTotal(0)
-        setResults([])
-      } else {
-        setError(false)
-        setResults(res.Search)
-        setTotal(res.totalResults)  
-      }
-    })  
-  }, []);
+  const [isLoading, setLoading] = useState(false);
 
   function handleChange(e){
     setSearch(e.target.value)
@@ -47,8 +28,33 @@ function Search(props) {
     history.push(`/search/${search}`)
   }
 
+  const handleQuery = useCallback((q) => {
+    //Reset data
+    setSearch('')
+    setQuery(q)
+    setError(false)
+    setLoading(true)
+    setTotal(0)
+    setResults([])
+
+    searchImdb(q, (res) => {
+      if(res.Response === "False") {
+        setError(true)
+      } else {
+        setError(false)
+        setResults(res.Search)
+        setTotal(res.totalResults)  
+      }
+      setLoading(false);
+    })  
+  }, []);
+  
+  useEffect(() => {
+    handleQuery(props.match.params.query)
+  }, [ props.match.params.query ]) 
+
   return (
-    <div>
+    <Container>
       <Form onSubmit={handleSearch}>
         <Row>
           <Col xs={10}>
@@ -57,6 +63,9 @@ function Search(props) {
                 type="text" 
                 onChange={handleChange}
                 value={search}
+                autoComplete="off"
+                autoCorrect="off"
+                spellCheck="off"
                 placeholder="example: The Office" />
             </Form.Group>
           </Col>
@@ -68,6 +77,9 @@ function Search(props) {
           <Col className="text-left">Search results for "{query}"</Col>
         </Row>
       </Form>
+      {(isLoading) &&
+        <div>Searching ...</div>
+      }
       {(error) &&
         <Alert variant="danger">
           No Results Found
@@ -79,7 +91,7 @@ function Search(props) {
           results={totalResults} 
         />
       }
-    </div>
+    </Container>
   );
 }
 

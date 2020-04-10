@@ -13,8 +13,12 @@ function List(props) {
     <Col>
       {list.map((ep, i) => (
         <Row key={i}>
-          <Col xs={3}>{ep.imdbRating}</Col>
-          <Col className="text-left">{ep.Title}</Col>
+          <Col xs={2}>{ep.imdbRating}</Col>
+          <Col className="text-left">
+            <a href={`https://www.imdb.com/title/${ep.imdbID}/`} target="_blank">
+              {ep.Title}
+            </a>
+          </Col>
         </Row>
       ))}
     </Col>

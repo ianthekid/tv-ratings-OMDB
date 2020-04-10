@@ -10,13 +10,17 @@ function ShowDetails(props) {
   }, [props]);
 
   return (
-    <Col>
+    <Col className="text-left">
       <Row>
-        <Image fluid src={data.poster} />
+        <a href={`https://www.imdb.com/title/${data.imdbID}/`} target="_blank">
+          <Image fluid src={data.poster} className="p-2" />
+        </a>
       </Row>
-      <Row><h2>{data.title}</h2></Row>
-      <Row>{data.year}</Row>
-      <Row>{data.imdbRating} ({data.imdbVotes})</Row>
+      <a href={`https://www.imdb.com/title/${data.imdbID}/`} target="_blank">
+        <h4>{data.title}</h4>
+      </a>
+      <h6>{data.year}</h6>
+      <h6>Rating: <strong>{data.imdbRating}</strong> <em>({data.imdbVotes})</em></h6>
     </Col>
   );
 }

@@ -26,28 +26,25 @@ function Show(props) {
   }, [props]);
 
   return (
-    <div>
+    <div className="p-3">
       {isLoading ? (
         <div>Loading ...</div>
       ) : (
         <Row>
-          <Col xs={3}>
+          <Col lg={2} md={3} sm={4}>
             <ShowDetails
+              year={show.year}
               title={show.Title}
               poster={show.Poster}
-              year={show.Year}
+              imdbID={show.imdbID}
               imdbVotes={show.imdbVotes}
               imdbRating={show.imdbRating}
             />
-            <hr/>
-            <BestWorst
-              seasons={seasons}
-            />
+            <BestWorst seasons={seasons} />
           </Col>
-          <Col xs={9}>
+          <Col lg={10} md={9} sm={8} id="ratings" className="pl-4">
             <Seasons
               count={show.totalSeasons}
-              title="The Office"
               seasons={seasons} />
           </Col>          
         </Row>
