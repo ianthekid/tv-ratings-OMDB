@@ -3,32 +3,13 @@ import { Form, Button } from 'react-bootstrap';
 import { SearchResults } from './';
 
 function searchImdb(title, callback) {
-  return fetch(`http://localhost:3001/s/${title}`)
+  fetch(`http://localhost:3001/s/${title}`)
   .then(res => res.json())
-  .then(function(data) {
-    return callback(data);
-  });
+  .then(data => callback(data));
 }
 
 function Search() {
-/*
-  var test = [
-    { id: 'tt0386676', t: 'the office' },
-    { id: 'tt0096697', t: 'simpsons' },
-    { id: 'tt0472954', t: 'always sunny' },
-    { id: 'tt0903747', t: 'breaking bad' },
-    { id: 'tt0112167', t: 'sliders' },
-  ]
-  {(test) &&
-    test.map((t) => (
-      <p>
-        <Link to={`/show/${t.id}`}>
-          {t.t}
-        </Link>
-      </p>
-    ))
-  }
-*/
+
   const [search, setSearch] = useState('');
   const [results, setResults] = useState([]);
   const [totalResults, setTotal] = useState(0);

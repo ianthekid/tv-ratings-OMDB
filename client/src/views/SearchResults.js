@@ -15,7 +15,9 @@ function SearchResults(props) {
       {list.map((s, i) => (
         <Row key={i} className="mb-3">
           <Col xs={2}>
-            <Image fluid src={s.Poster} />
+            {(s.Poster != "N/A") &&
+              <Image fluid src={s.Poster} />
+            }
           </Col>
           <Col className="text-left">
             <h3>
