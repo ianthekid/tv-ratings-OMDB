@@ -17,7 +17,7 @@ app.listen(3001, () => {
 });
 
 app.get('/s/:search', function(req, res){
-  var url = `${api}&type=series&t=${req.params.search}`;
+  var url = `${api}&type=series&s=${req.params.search}`;
   query(url, function(r){
     res.send(r);
   })
