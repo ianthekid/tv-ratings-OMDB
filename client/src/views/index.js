@@ -5,6 +5,7 @@ import Search from './Search';
 import SearchResults from './SearchResults';
 import Seasons from './Seasons';
 import Show from './Show';
+import ShowDetails from './ShowDetails';
 
 export { 
   BestWorst,
@@ -13,5 +14,6 @@ export {
   Search,
   SearchResults,
   Seasons,
-  Show
+  Show,
+  ShowDetails
 };

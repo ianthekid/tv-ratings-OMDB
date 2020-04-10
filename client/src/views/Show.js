@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { BestWorst, Seasons } from './';
-
+import { BestWorst, Seasons, ShowDetails } from './';
+import { Row, Col } from 'react-bootstrap';
 
 function getShow(id) {
   return fetch(`http://localhost:3001/id/${id}`)
@@ -14,26 +14,41 @@ function getShow(id) {
 
 function Show(props) {
   const [show, setShow] = useState([]);
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    getShow(props.match.params.imdbID).then((res) => { setShow(res); })
+    getShow(props.match.params.imdbID).then((res) => { 
+      setShow(res);
+      setLoading(false);
+    })
   }, [props]);
 
   return (
     <div>
-      <h2>Number of Seasons: {show.length}</h2>
-      {(show) &&
-        <div>
-          <Seasons
-            count={show.length}
-            title="The Office"
-            seasons={show} />
-
-          <BestWorst
-            seasons={show}
-          />
-        </div>
-      }
+      {isLoading ? (
+        <div>Loading ...</div>
+      ) : (
+        <Row>
+          <Col xs={3}>
+            <ShowDetails
+              title={`The Office`}
+              poster={`https://m.media-amazon.com/images/M/MV5BMDNkOTE4NDQtMTNmYi00MWE0LWE4ZTktYTc0NzhhNWIzNzJiXkEyXkFqcGdeQXVyMzQ2MDI5NjU@._V1_SX300.jpg`}
+              seasons={show.length}
+              episodes={show.length}
+            />
+            <hr/>
+            <BestWorst
+              seasons={show}
+            />
+          </Col>
+          <Col xs={9}>
+            <Seasons
+              count={show.length}
+              title="The Office"
+              seasons={show} />
+          </Col>          
+        </Row>
+      )}
     </div>
   );
 }
