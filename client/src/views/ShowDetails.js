@@ -15,7 +15,8 @@ function ShowDetails(props) {
         <Image fluid src={data.poster} />
       </Row>
       <Row><h2>{data.title}</h2></Row>
-      <Row>{data.seasons} Seasons, {data.episodes} Episodes</Row>
+      <Row>{data.year}</Row>
+      <Row>{data.imdbRating} ({data.imdbVotes})</Row>
     </Col>
   );
 }
