@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from "react-router-dom";
-import { Alert, Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { Alert, Container, Row, Col } from 'react-bootstrap';
 import { SearchResults } from './';
+import { SearchForm } from './';
 
 function searchImdb(title, callback) {
   fetch(`http://localhost:3001/s/${encodeURIComponent(title)}`)
@@ -19,8 +20,8 @@ function Search(props) {
   const [totalResults, setTotal] = useState(0);
   const [isLoading, setLoading] = useState(false);
 
-  function handleChange(e){
-    setSearch(e.target.value)
+  function handleChange(input){
+    setSearch(input)
   }
 
   function handleSearch(e) {
@@ -55,28 +56,11 @@ function Search(props) {
 
   return (
     <Container>
-      <Form onSubmit={handleSearch}>
-        <Row>
-          <Col xs={10}>
-            <Form.Group controlId="showTitle">
-              <Form.Control 
-                type="text" 
-                onChange={handleChange}
-                value={search}
-                autoComplete="off"
-                autoCorrect="off"
-                spellCheck="off"
-                placeholder="example: The Office" />
-            </Form.Group>
-          </Col>
-          <Col xs={2}>
-            <Button type="submit">Submit</Button>
-          </Col>
-        </Row>
-        <Row>
-          <Col className="text-left">Search results for "{query}"</Col>
-        </Row>
-      </Form>
+      <SearchForm
+        handleSearch={handleSearch}
+        handleChange={handleChange}
+        search={search}
+      />
       {(isLoading) &&
         <div>Searching ...</div>
       }
@@ -84,6 +68,11 @@ function Search(props) {
         <Alert variant="danger">
           No Results Found
         </Alert>
+      }
+      {(totalResults > 0) &&
+        <Row>
+          <Col className="text-left">Search results for "{query}"</Col>
+        </Row>
       }
       {(totalResults > 0) &&
         <SearchResults 

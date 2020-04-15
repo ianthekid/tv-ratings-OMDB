@@ -3,6 +3,7 @@ import Episode from './Episode';
 import Home from './Home';
 import List from './List';
 import Search from './Search';
+import SearchForm from './SearchForm';
 import SearchResults from './SearchResults';
 import Seasons from './Seasons';
 import Show from './Show';
@@ -14,6 +15,7 @@ export {
   Home,
   List,
   Search,
+  SearchForm,
   SearchResults,
   Seasons,
   Show,
