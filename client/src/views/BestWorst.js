@@ -2,25 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Row } from 'react-bootstrap';
 import { List } from './';
 
-function sortedEps(seasons, cb) {
-  var show = [];
-  seasons.map(s => {
-    s.episodes.map(e => show.push(e))
-  })
-  show.sort((a, b) => parseFloat(a.imdbRating) - parseFloat(b.imdbRating));
-  return cb(show);
-}
-
 function BestWorst(props) {
 
   const [best, setBest] = useState([]);
   const [worst, setworst] = useState([]);
 
   useEffect(() => {
-    sortedEps(props.seasons, (res) => { 
-      setBest( res.slice(-3).reverse() )
-      setworst( res.slice(0, 3) )
-    });
+    props.seasons.sort((a, b) => parseFloat(a.imdbRating) - parseFloat(b.imdbRating));
+    setBest( props.seasons.slice(-3).reverse() )
+    setworst( props.seasons.slice(0, 3) )
   }, [props]);
 
   return (

@@ -93,6 +93,9 @@ app.get('/show/:tconst/seasons', function(req, res){
           }
         })
       }
+    } else {
+      //If only 1 Season exists
+      res.send(seasons);
     }
   });
 })
