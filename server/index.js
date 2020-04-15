@@ -3,6 +3,7 @@ var cors = require('cors');
 var fs = require('fs');
 var config = require('./config.json');
 const query = require('./lib/query');
+const getSeasons = require('./lib/getSeasons');
 const api = `${config.endpoint}?apikey=${config.api}`;
 const ratings = JSON.parse(fs.readFileSync("./files/ratings.json"));
 var mongo = require('./mongo.js');
@@ -75,31 +76,20 @@ app.get('/show/:tconst/seasons', function(req, res){
       season: 1, 
       episodes: show.Episodes 
     }];
-    //Loop through all seasons and output as array of objs sorted by Season #
     if(show.totalSeasons > 1) {
-      for(var i=2; i<=show.totalSeasons; i++) {
-        //OMDB api query for season
-        query(`${url}&Season=${i}`, function(s) {
-          seasons.push({ 
-            season: parseInt(s.Season, 10),
-            episodes: s.Episodes
-          })
-
-          //Run seasons query async. Wait for arr to match totalSeasons
-          if(seasons.length == show.totalSeasons) {
-            //sort by season
-            seasons.sort((a,b) => (a.season > b.season) ? 1 : ((b.season > a.season) ? -1 : 0));
-            res.send(seasons);
-          }
-        })
-      }
+      //Loop through all seasons and output as array of objs sorted by Season #
+      getSeasons(url, show.totalSeasons, seasons)
+      .then((arr) => {
+          //sort by season
+          arr.sort((a,b) => (a.season > b.season) ? 1 : ((b.season > a.season) ? -1 : 0));
+          res.send(arr);
+      })
     } else {
       //If only 1 Season exists
       res.send(seasons);
     }
   });
 })
-
 
 app.get('/collection', function(req, res){
   mongo(client => {
@@ -114,7 +104,6 @@ app.get('/collection', function(req, res){
 
 
 app.get('/ratings/:tconst', function(req,res){
-
   mongo(client => {
     const db = client.db('tvratings');
     const collection = db.collection('test');
@@ -126,8 +115,5 @@ app.get('/ratings/:tconst', function(req,res){
       res.send(result)
     });
   })  
-
-
-  //tt0472954
  // var ep = imdb.find(x => x.tconst === "tt6362512")
 })
