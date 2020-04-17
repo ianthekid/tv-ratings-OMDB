@@ -58,14 +58,60 @@ app.get('/id/:id', function(req, res){
   })
 })
 
-app.get('/show/:tconst', function(req, res){
-  //OMDB api query for show/series by tconst
-  var url = `${api}&i=${req.params.tconst}`;
-  query(url, function(show) {
-    //${show} returns basic info (Title, Poster, meta info)
-    res.send(show);
+
+app.get('/mongo/show/:tconst', function(req, res){
+  mongo(client => {
+    const db = client.db('tvratings');
+    const collection = db.collection('episodes');
+    const ratings = db.collection('ratings');
+
+    (async () => {
+      let results = await collection.find({'parentTconst': req.params.tconst}).toArray();
+      let episodes = [];
+      let cnt=0;
+
+      results.map((item) => {
+        (async () => {
+          let ep = await ratings.findOne({'tconst': item.tconst});
+          if(!ep) {
+            console.log(item.tconst)
+          } else {
+            episodes.push({
+              ...item,
+              averageRating: ep.averageRating,
+              numVotes: ep.numVotes
+            })  
+          }
+          cnt++;
+          if(cnt == results.length) {
+            res.send(episodes)  
+            console.log(episodes.length)
+            console.log(results.length)
+          }
+          })()
+      })
+    })()
+
+
+  });
+
+})
+
+
+app.get('/mongo/ratings/:tconst', function(req, res){
+
+  mongo(client => {
+    const db = client.db('tvratings');
+    const collection = db.collection('ratings');
+
+    (async () => {
+      let item = await collection.findOne({'tconst': req.params.tconst});
+      res.send(item)  
+    })()
+
   });
 })
+
 
 app.get('/show/:tconst/seasons', function(req, res){
   //OMDB api query for seasons by series tconst and Season #
